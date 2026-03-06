@@ -333,13 +333,13 @@ How many stops were there per race in 2011? What percentage of stops per race in
 total_stops_race_recorded <-
   sqf_2011 |>
   #Subset to rows where race_cat is not NA or "OTHER"
-  filter(desc(race_cat) & race_cat != "OTHER") |> 
+  filter(!is.na(race_cat) & race_cat != "OTHER") |> 
   summarize(Count = n()) |>
   pull()
 
 sqf_2011 |>
   #Subset to rows where race_cat is not NA or "OTHER"
-  filter(desc(race_cat) & race_cat != "OTHER") |> 
+  filter(!is.na(race_cat) & race_cat != "OTHER") |> 
   #Group by race
   group_by(race_cat) |> 
   #Calculate number of observations
@@ -381,12 +381,12 @@ What percentage of stops in 2011 resulted in a frisk per race? What percentage o
 ```{r, eval = FALSE}
 stops_race <-
   sqf_2011 |>
-  filter(desc(race_cat) & race_cat != "OTHER") |> 
+  filter(!is.na(race_cat) & race_cat != "OTHER") |> 
   summarize(Count = n()) |>
   pull()
 
 sqf_2011 |>
-  filter(desc(race_cat) & race_cat != "OTHER") |> 
+  filter(!is.na(race_cat) & race_cat != "OTHER") |> 
   group_by(race_cat) |> 
   summarise(stops = n(),
             percent_stops = n() / stops_race * 100,
