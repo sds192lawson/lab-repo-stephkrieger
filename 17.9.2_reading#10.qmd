@@ -1,0 +1,74 @@
+---
+title: "Reading Problem 17.9.2"
+author: "Steph Krieger"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+library(leaflet)
+library(pdxTrees)
+
+pdxTrees_parks <- get_pdxTrees_parks()
+```
+
+```{r}
+pal_factor <- colorFactor(palette = "Set2",
+                    domain = pdxTrees_parks$Genus)
+
+tree_diversity_map <- leaflet() |>
+  setView(lat = 45.5, lng = -122.6, zoom = 9) |> 
+  addProviderTiles("OpenStreetMap") |> 
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(data = pdxTrees_parks,
+                   fillColor = ~pal_factor(Genus))|>
+  addLegend(data = pdxTrees_parks,
+            pal = pal_factor, 
+            values = ~Genus)
+
+
+
+tree_diversity_map
+```
+
+```{r}
+pal_num <- colorNumeric(palette="Set2", 
+                        domain = pdxTrees_parks$Carbon_Storage_value)
+
+tree_contribution_map <- leaflet() |>
+  setView(lat = 45.5, lng = -122.6, zoom = 9) |> 
+  addProviderTiles("OpenStreetMap") |> 
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers(data = pdxTrees_parks,
+                   fillColor = ~pal_num(Carbon_Storage_value))|>
+  addLegend(data = pdxTrees_parks,
+            pal = pal_num, 
+            values = ~Carbon_Storage_value)
+
+
+
+tree_contribution_map
+```
+
+```{r}
+pdxTrees_parks <- pdxTrees_parks|>
+filter(Condition == "Dead")
+
+pal_factor <- colorFactor(palette = "Set2",
+                    domain = pdxTrees_parks$Condition)                 
+
+tree_remove_map <- leaflet() |>
+  setView(lat = 45.5, lng = -122.6, zoom = 9) |> 
+  addProviderTiles("OpenStreetMap") |> 
+  addProviderTiles("CartoDB.Positron") |>
+  addMarkers(data = pdxTrees_parks)
+
+
+
+tree_remove_map
+```
+
+
